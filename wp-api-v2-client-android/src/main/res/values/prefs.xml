@@ -4,6 +4,7 @@
     <string name="pref_id_has_profile">pref.user.has_profile</string>
     <string name="pref_id_username">pref.user.id</string>
     <string name="pref_id_email">pref.user.email</string>
+    <string name="pref_id_password">pref.user.password</string>
     <string name="pref_id_name">pref.user.name</string>
     <string name="pref_id_first_name">pref.user.first_name</string>
     <string name="pref_id_last_name">pref.user.last_name</string>

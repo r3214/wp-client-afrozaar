@@ -1,6 +1,7 @@
 package com.afrozaar.wp_api_v2_client_android.rest;
 
 import com.afrozaar.wp_api_v2_client_android.WordPressRestInterface;
+import com.afrozaar.wp_api_v2_client_android.model.Comment;
 import com.afrozaar.wp_api_v2_client_android.model.Media;
 import com.afrozaar.wp_api_v2_client_android.model.Meta;
 import com.afrozaar.wp_api_v2_client_android.model.Post;
@@ -47,9 +48,9 @@ public class WpClientRetrofit {
         // add the Basic Auth header
         builder.addInterceptor(new OkHttpBasicAuthInterceptor(username, password));
 
-        if (debugEnabled) {
+        //if (debugEnabled) {
             builder.addInterceptor(new OkHttpDebugInterceptor());
-        }
+        //}
 
         // setup retrofit with custom OkHttp client and Gson parser
         Retrofit retrofit = new Retrofit.Builder()
@@ -122,13 +123,11 @@ public class WpClientRetrofit {
 
     public void getPost(long postId, WordPressRestResponse<Post> callback) {
         Map<String, String> map = new HashMap<>();
-        map.put("context", "edit");
         doRetrofitCall(mRestInterface.getPost(postId, map), callback);
     }
 
     public Call<Post> getPost(long postId) {
         Map<String, String> map = new HashMap<>();
-        map.put("context", "edit");
         return mRestInterface.getPost(postId, map);
     }
 
@@ -142,6 +141,24 @@ public class WpClientRetrofit {
         doRetrofitCall(mRestInterface.getPosts(), callback);
     }
 
+    public void getPosts(WordPressRestResponse<List<Post>> callback, Map<String, String> params) {
+        doRetrofitCall(mRestInterface.getPosts(params), callback);
+    }
+
+    public void getPostsForPage(WordPressRestResponse<List<Post>> callback, int startPage) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", startPage + "");
+        doRetrofitCall(mRestInterface.getPosts(map), callback);
+    }
+
+    public void getPostsForPage(WordPressRestResponse<List<Post>> callback, int startPage, Map<String, String> params) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", startPage + "");
+        map.putAll(params);
+        doRetrofitCall(mRestInterface.getPosts(map), callback);
+    }
+
+
     public Call<List<Post>> getPosts() {
         return mRestInterface.getPosts();
     }
@@ -149,14 +166,12 @@ public class WpClientRetrofit {
     public Call<List<Post>> getPostsForPage(int startPage) {
         Map<String, String> map = new HashMap<>();
         map.put("page", startPage + "");
-        map.put("context", "edit");
         return mRestInterface.getPosts(map);
     }
 
     public Call<List<Post>> getPostsAfterDate(String date) {
         Map<String, String> map = new HashMap<>();
         map.put("after", date);
-        map.put("context", "edit");
         return mRestInterface.getPosts(map);
     }
 
@@ -168,7 +183,7 @@ public class WpClientRetrofit {
         doRetrofitCall(getPostsForAuthor(authorId, status), callback);
     }
 
-    public void getPostsForTag(String tag, WordPressRestResponse<List<Post>> callback) {
+    public void getPostsForTag(long tag, WordPressRestResponse<List<Post>> callback) {
         doRetrofitCall(mRestInterface.getPostsForTags(tag), callback);
     }
 
@@ -189,6 +204,22 @@ public class WpClientRetrofit {
 
     public Call<Post> deletePost(long postId, boolean force) {
         return mRestInterface.deletePost(postId, force, "edit");
+    }
+
+    /* COMMENTS */
+
+    public void getComments(WordPressRestResponse<List<Comment>> callback, long postId) {
+        doRetrofitCall(mRestInterface.getComments(postId), callback);
+    }
+
+    public void getCommentsForPage(WordPressRestResponse<List<Comment>> callback, long postId, int startPage) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", startPage + "");
+        doRetrofitCall(mRestInterface.getComments(postId, map), callback);
+    }
+
+    public void createComment(Comment comment, WordPressRestResponse<Comment> callback) {
+        doRetrofitCall(mRestInterface.createComment(Comment.mapFromFields(comment)), callback);
     }
 
     /* MEDIA */

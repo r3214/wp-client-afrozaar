@@ -3,6 +3,8 @@ package com.afrozaar.wp_api_v2_client_android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author Jan-Louis Crafford
  *         Created on 2016/01/07.
@@ -15,7 +17,11 @@ public class MediaDetails extends BaseModel {
 
     private String file;
 
-    // TODO add 'sizes' and 'image_meta' data
+    private String mime_type;
+
+    private MediaSizes sizes;
+
+    // TODO add 'image_meta' data
 
     public MediaDetails() {
     }
@@ -25,6 +31,8 @@ public class MediaDetails extends BaseModel {
         width = in.readInt();
         height = in.readInt();
         file = in.readString();
+        mime_type = in.readString();
+        sizes = in.readParcelable(MediaSizes.class.getClassLoader());
     }
 
     @Override
@@ -33,6 +41,8 @@ public class MediaDetails extends BaseModel {
         dest.writeInt(width);
         dest.writeInt(height);
         dest.writeString(file);
+        dest.writeString(mime_type);
+        dest.writeParcelable(sizes, flags);
     }
 
     @Override
@@ -51,5 +61,13 @@ public class MediaDetails extends BaseModel {
             return new MediaDetails[size];
         }
     };
+
+    public String getMimeType(){
+        return mime_type;
+    }
+
+    public MediaSizes getMediaSizes() {
+        return sizes;
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.afrozaar.wp_api_v2_client_android.util;
 
 import android.text.TextUtils;
+import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +10,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,15 +78,47 @@ public class DataConverters {
         return null;
     }
 
-    public static long convertWpDateToLong(String dateInput) {
+    public static Date convertWpDate(String dateInput) {
         try {
             if (dateInput != null) {
-                return sPostDateFormat.parse(dateInput + " UTC").getTime();
+                return sPostDateFormat.parse(dateInput + " UTC");
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return -1;
+        return null;
+    }
+
+    /**
+     * Parses a location as returned from the API into a pair of a lat and lon
+     * @param location location string
+     * @return pair of a lat and lon
+     */
+    public static Pair<Double, Double> parseLocation(String location){
+        if (location == null || location.isEmpty() || location.split(", ").length != 2) return null;
+
+        String lat = location.split(", ")[0].replace("(","");
+        String lon = location.split(", ")[1].replace(")","");
+
+        return new Pair<>(Double.parseDouble(lat),Double.parseDouble(lon));
+    }
+
+    /**
+     * Parses a source as returned from the API into a list of title-url pairs
+     * @param sources Sources string from the API
+     * @return a list of title-url pairs
+     */
+    public static List<Pair<String,String>> parseSources(String sources){
+        if (sources == null || sources.isEmpty()) return null;
+
+        String[] sourcesArray = sources.split("[\\r\\n]+");
+
+        List<Pair<String,String>> result = new ArrayList<>();
+        for (String source : sourcesArray){
+            result.add(new Pair<>(source.split("\\|\\|")[0],source.split("\\|\\|")[1]));
+        }
+
+        return result;
     }
 }

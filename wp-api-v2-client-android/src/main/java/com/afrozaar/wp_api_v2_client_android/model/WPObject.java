@@ -284,6 +284,7 @@ public abstract class WPObject<T extends WPObject> extends BaseModel {
         author = in.readInt();
         commentStatus = in.readParcelable(WPStatus.class.getClassLoader());
         pingStatus = in.readParcelable(WPStatus.class.getClassLoader());
+        links = new ArrayList<>(); //TODO
         in.readTypedList(links, Link.CREATOR);
     }
 

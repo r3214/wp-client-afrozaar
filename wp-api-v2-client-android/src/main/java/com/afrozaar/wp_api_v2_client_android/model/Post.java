@@ -32,6 +32,8 @@ public class Post extends WPObject<Post> {
     public static final String JSON_FIELD_FORMAT = "format";
     public static final String JSON_FIELD_STATUS = "status";
     public static final String JSON_FIELD_CATEGORIES = "categories";
+    public static final String JSON_FIELD_BETTER_FEATURED_IMAGE = "better_featured_image";
+    public static final String JSON_FIELD_BETTER_ATTACHMENTS = "better_attachments";
 
 
     /**
@@ -201,6 +203,36 @@ public class Post extends WPObject<Post> {
         return this;
     }
 
+    /**    @SerializedName("_embedded")
+    private Embedded embedded;
+
+    public Embedded getEmbedded() {
+    return embedded;
+    } **/
+
+    @SerializedName("better_featured_image")
+    private Media betterFeaturedImage;
+
+    public Media getBetterFeaturedImage() {
+        return betterFeaturedImage;
+    }
+
+    @SerializedName("better_attachments")
+    private List<Media> betterAttachments;
+
+    public List<Media> getBetterAttachments() {
+        return betterAttachments;
+    }
+
+    @SerializedName("sources")
+    private String sources;
+
+    public String getSources() { return sources; }
+
+    @SerializedName("location")
+    private String location;
+
+    public String getLocation() { return location; }
 
     @SerializedName("tags")
     private List<Long> tags;
@@ -337,6 +369,11 @@ public class Post extends WPObject<Post> {
         status = in.readString();
         categories = new ArrayList<>();
         in.readList(categories, Long.class.getClassLoader());
+        betterFeaturedImage = in.readParcelable(WPGeneric.class.getClassLoader());
+        betterAttachments = new ArrayList<>();
+        in.readList(betterAttachments, Media.class.getClassLoader());
+        sources = in.readString();
+        location = in.readString();
         tags = new ArrayList<>();
         in.readList(tags, Long.class.getClassLoader());
     }
@@ -353,6 +390,10 @@ public class Post extends WPObject<Post> {
         dest.writeString(format);
         dest.writeString(status);
         dest.writeList(categories);
+        dest.writeParcelable(betterFeaturedImage, flags);
+        dest.writeList(betterAttachments);
+        dest.writeString(sources);
+        dest.writeString(location);
         dest.writeList(tags);
     }
 
@@ -371,6 +412,8 @@ public class Post extends WPObject<Post> {
         Validate.validateMapEntry(JSON_FIELD_LINKS, post.getLinks(), builder);
         Validate.validateMapEntry(JSON_FIELD_STATUS, post.getStatus(), builder);
         Validate.validateMapEntry(JSON_FIELD_CATEGORIES, post.getCategories(), builder);
+        Validate.validateMapEntry(JSON_FIELD_BETTER_FEATURED_IMAGE, post.getBetterFeaturedImage(), builder);
+        Validate.validateMapEntry(JSON_FIELD_BETTER_ATTACHMENTS, post.getBetterAttachments(), builder);
 
         return builder;
     }

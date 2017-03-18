@@ -306,4 +306,25 @@ public class Media extends WPObject<Media> {
             return new Media[size];
         }
     };
+
+    /**
+     * Quick method for getting a medium large image for display
+     * @return Url of medium large image, or other sizes if unavailable
+     */
+    public String getGoodSourceUrl(){
+        if (getMediaDetails() == null ||
+                getMediaDetails().getMediaSizes() == null)
+            return getSourceUrl();
+
+        MediaSizes sizes = getMediaDetails().getMediaSizes();
+        if (sizes.getMedium_large() != null && sizes.getMedium_large().getSourceUrl() != null){
+            return sizes.getMedium_large().getSourceUrl();
+        } else if (sizes.getLarge() != null && sizes.getLarge().getSourceUrl() != null){
+            return sizes.getLarge().getSourceUrl();
+        } else if (sizes.getMedium() != null && sizes.getMedium().getSourceUrl() != null){
+            return sizes.getMedium().getSourceUrl();
+        } else {
+            return getSourceUrl();
+        }
+    }
 }

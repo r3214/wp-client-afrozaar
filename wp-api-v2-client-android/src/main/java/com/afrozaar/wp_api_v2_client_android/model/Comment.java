@@ -3,6 +3,7 @@ package com.afrozaar.wp_api_v2_client_android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.afrozaar.wp_api_v2_client_android.util.Validate;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -13,6 +14,19 @@ import java.util.Map;
  *         Created on 2016/01/14.
  */
 public class Comment extends BaseModel {
+
+    public static final String JSON_FIELD_AUTHOR = "author";
+    public static final String JSON_FIELD_AUTHOR_EMAIL = "author_email";
+    public static final String JSON_FIELD_AUTHOR_NAME = "author_name";
+    public static final String JSON_FIELD_AUTHOR_URL = "author_url";
+    public static final String JSON_FIELD_CONTENT = "content";
+    public static final String JSON_FIELD_DATE = "date";
+    public static final String JSON_FIELD_DATE_GMT = "date_gmt";
+    public static final String JSON_FIELD_KARMA = "karma";
+    public static final String JSON_FIELD_PARENT = "parent";
+    public static final String JSON_FIELD_POST = "post";
+    public static final String JSON_FIELD_STATUS = "status";
+    public static final String JSON_FIELD_TYPE = "type";
 
     /**
      * Unique identifier for the object.
@@ -278,17 +292,17 @@ public class Comment extends BaseModel {
      * The id for the parent of the object.
      */
     @SerializedName("parent")
-    private int parent;
+    private long parent;
 
-    public void setParent(int parent) {
+    public void setParent(long parent) {
         this.parent = parent;
     }
 
-    public int getParent() {
+    public long getParent() {
         return parent;
     }
 
-    public Comment withParent(int parent) {
+    public Comment withParent(long parent) {
         setParent(parent);
         return this;
     }
@@ -368,8 +382,8 @@ public class Comment extends BaseModel {
         dateGMT = in.readString();
         karma = in.readInt();
         link = in.readString();
-        parent = in.readInt();
-        post = in.readInt();
+        parent = in.readLong();
+        post = in.readLong();
         status = in.readString();
         type = in.readString();
     }
@@ -390,7 +404,7 @@ public class Comment extends BaseModel {
         dest.writeString(dateGMT);
         dest.writeInt(karma);
         dest.writeString(link);
-        dest.writeInt(parent);
+        dest.writeLong(parent);
         dest.writeLong(post);
         dest.writeString(status);
         dest.writeString(type);
@@ -399,6 +413,26 @@ public class Comment extends BaseModel {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public static Map<String, Object> mapFromFields(Comment comment) {
+        Map<String, Object> builder = new HashMap<>();
+
+        if (comment.getContent() != null) {
+            Validate.validateMapEntry(JSON_FIELD_CONTENT, comment.getContent().getRaw(), builder);
+        }
+        Validate.validateMapEntry(JSON_FIELD_AUTHOR, comment.getAuthor(), builder);
+        Validate.validateMapEntry(JSON_FIELD_AUTHOR_EMAIL, comment.getAuthorEmail(), builder);
+        Validate.validateMapEntry(JSON_FIELD_AUTHOR_NAME, comment.getAuthorName(), builder);
+        Validate.validateMapEntry(JSON_FIELD_DATE, comment.getDate(), builder);
+        Validate.validateMapEntry(JSON_FIELD_DATE_GMT, comment.getDateGMT(), builder);
+        Validate.validateMapEntry(JSON_FIELD_KARMA, comment.getKarma(), builder);
+        Validate.validateMapEntry(JSON_FIELD_PARENT, comment.getParent(), builder);
+        Validate.validateMapEntry(JSON_FIELD_POST, comment.getPost(), builder);
+        Validate.validateMapEntry(JSON_FIELD_STATUS, comment.getStatus(), builder);
+        Validate.validateMapEntry(JSON_FIELD_TYPE, comment.getType(), builder);
+
+        return builder;
     }
 
     public static final Parcelable.Creator<Comment> CREATOR = new Creator<Comment>() {

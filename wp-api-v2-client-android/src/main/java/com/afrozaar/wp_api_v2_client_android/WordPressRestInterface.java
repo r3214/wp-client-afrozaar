@@ -376,10 +376,13 @@ public interface WordPressRestInterface {
     /* COMMENTS */
 
     @POST("comments")
-    Call<Comment> createComment(Map<String, Object> fields);
+    Call<Comment> createComment(@Body Map<String, Object> fields);
 
     @GET("comments")
-    Call<List<Comment>> getComments();
+    Call<List<Comment>> getComments(@Query("post") long post);
+
+    @GET("comments")
+    Call<List<Comment>> getComments(@Query("post") long post, @QueryMap Map<String, String> map);
 
     @GET("comments/{id}")
     Call<Comment> getComment(@Path("id") long id);
@@ -394,7 +397,7 @@ public interface WordPressRestInterface {
     /* OTHER */
 
     @GET("posts")
-    Call<List<Post>> getPostsForTags(@Query("filter[tag]") String tag);
+    Call<List<Post>> getPostsForTags(@Query("tags") long tag);
 
     /**
      * Returns the number of pages for each of the following post states:

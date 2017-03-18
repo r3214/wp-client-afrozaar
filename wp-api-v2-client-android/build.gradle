@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '24.0'
 
     defaultConfig {
         minSdkVersion 15
@@ -19,14 +19,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // HTTP libs
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
     // Parsing libs
     compile 'com.google.code.gson:gson:2.4'
-
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
 }
